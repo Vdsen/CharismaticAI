@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charismatic AI - Smart Social Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4338ca;
+            --secondary-color: #f8fafc;
+            --accent-color: #8b5cf6;
+            --text-dark: #0f172a;
+            --text-light: #64748b;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --success-color: #10b981;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        header {
+            background: #ffffff;
+            color: var(--text-dark);
+            padding: 1.25rem 0;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+        }
+
+        .logo h1 span {
+            color: var(--primary-color);
+        }
+        
+        .logo-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+        }
+        
+        .api-badge {
+            background-color: #eef2ff;
+            color: var(--primary-color);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid #e0e7ff;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 450px 1fr;
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        @media (max-width: 950px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 10px 15px -5px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 1.5rem;
+            background-color: #fafafa;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: #f5f3ff;
+        }
+        
+        .upload-area.dragover {
+            border-color: var(--primary-color);
+            background-color: #ede9fe;
+        }
+        
+        .upload-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+        
+        .upload-text {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+        
+        .upload-subtext {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+            width: 100%;
+            font-size: 0.95rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-dark);
+        }
+
+        .btn-outline:hover {
+            background-color: #f8fafc;
+            border-color: var(--text-light);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .file-info {
+            margin-top: 1rem;
+            padding: 12px;
+            background-color: #f8fafc;
+            border-radius: 12px;
+            display: none;
+            border: 1px solid var(--border-color);
+        }
+        
+        .file-info.active {
+            display: block;
+        }
+        
+        .file-details {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .file-details i {
+            color: var(--success-color);
+        }
+
+        .image-preview-wrapper {
+            margin-top: 1.5rem;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f1f5f9;
+            display: none;
+        }
+
+        .image-preview-wrapper.active {
+            display: block;
+        }
+        
+        .image-preview {
+            width: 100%;
+            display: block;
+            max-height: 400px;
+            object-fit: contain;
+        }
+        
+        .chat-context-box {
+            background: linear-gradient(to right, #f8fafc, #ffffff);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border-left: 4px solid var(--primary-color);
+            margin-bottom: 2rem;
+        }
+
+        .context-header {
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .suggestion-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        
+        .suggestion-card {
+            background-color: white;
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 16px;
+            transition: transform 0.2s;
+        }
+
+        .suggestion-card:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .label-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .label-best { background: #eef2ff; color: #4338ca; }
+        .label-friendly { background: #ecfdf5; color: #065f46; }
+        .label-flirty { background: #fff1f2; color: #9f1239; }
+        
+        .suggestion-text {
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            margin-bottom: 1.25rem;
+            font-weight: 500;
+        }
+        
+        .confidence-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.25rem;
+        }
+        
+        .confidence-bar-bg {
+            flex: 1;
+            height: 6px;
+            background: #f1f5f9;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .confidence-bar-fill {
+            height: 100%;
+            background: var(--success-color);
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+        }
+        
+        .confidence-pct {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--success-color);
+            min-width: 35px;
+        }
+        
+        .card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .card-actions .btn {
+            padding: 8px 16px;
+            font-size: 0.85rem;
+        }
+        
+        .loading-overlay {
+            display: none;
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        
+        .loading-overlay.active {
+            display: block;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #e2e8f0;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        footer {
+            background-color: white;
+            border-top: 1px solid var(--border-color);
+            padding: 2.5rem 0;
+            margin-top: 4rem;
+        }
+        
+        .footer-grid {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-brand h2 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .footer-copy {
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+        
+        @media (max-width: 600px) {
+            .footer-grid {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+            }
+            .card-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-sparkles"></i>
+                    </div>
+                    <h1>Charismatic <span>AI</span></h1>
+                </div>
+                <div class="api-badge">
+                    <i class="fas fa-bolt"></i> Gemini Flash 2.5
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <main class="main-content">
+            <section class="upload-panel">
+                <div class="card">
+                    <h2 class="section-title">Upload Conversation</h2>
+                    <p class="section-subtitle">Drop a chat screenshot to analyze the vibe.</p>
+                    
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-image upload-icon"></i>
+                        <div class="upload-text">Select a screenshot</div>
+                        <div class="upload-subtext">Supports PNG, JPG (Max 5MB)</div>
+                        <input type="file" id="fileInput" accept="image/*" hidden>
+                    </div>
+                    
+                    <div class="file-info" id="fileInfo">
+                        <div class="file-details">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <div id="fileName" style="font-weight: 600; font-size: 0.9rem;">chat_log.png</div>
+                                <div id="fileSize" style="font-size: 0.75rem; color: var(--text-light);">1.2 MB</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="image-preview-wrapper" id="previewWrapper">
+                        <img id="imagePreview" class="image-preview" src="" alt="Preview">
+                    </div>
+                    
+                    <button class="btn btn-primary" id="analyzeBtn" style="margin-top: 1.5rem;" disabled>
+                        <i class="fas fa-wand-magic-sparkles"></i> Analyze Vibe
+                    </button>
+                </div>
+            </section>
+            
+            <section class="results-panel">
+                <div class="card" style="min-height: 500px;">
+                    <h2 class="section-title">AI Suggestions</h2>
+                    <p class="section-subtitle">Tailored responses based on social dynamics.</p>
+                    
+                    <div class="loading-overlay" id="loadingIndicator">
+                        <div class="spinner"></div>
+                        <p style="font-weight: 600;">Reading the room...</p>
+                        <p class="upload-subtext">Charismatic AI is analyzing the conversation flow.</p>
+                    </div>
+                    
+                    <div id="resultsContent">
+                        <div class="chat-context-box">
+                            <div class="context-header">
+                                <i class="fas fa-fingerprint"></i> Situation Analysis
+                            </div>
+                            <div id="contextText" style="font-size: 0.95rem; color: #475569;">
+                                Upload a conversation to get started. Our AI will identify the relationship context and emotional tone.
+                            </div>
+                        </div>
+                        
+                        <div class="suggestion-list">
+                            <!-- Best Response -->
+                            <div class="suggestion-card">
+                                <span class="label-badge label-best"><i class="fas fa-crown"></i> High Value</span>
+                                <div class="suggestion-text" id="bestResponse">The most effective response will appear here.</div>
+                                <div class="confidence-container">
+                                    <div class="confidence-bar-bg"><div class="confidence-bar-fill" id="confBar1"></div></div>
+                                    <span class="confidence-pct" id="confVal1">0%</span>
+                                </div>
+                                <div class="card-actions">
+                                    <button class="btn btn-primary copy-btn" data-target="bestResponse"><i class="fas fa-copy"></i> Copy</button>
+                                </div>
+                            </div>
+
+                            <!-- Friendly Response -->
+                            <div class="suggestion-card">
+                                <span class="label-badge label-friendly"><i class="fas fa-smile"></i> Chill / Warm</span>
+                                <div class="suggestion-text" id="friendlyResponse">A friendly alternative response.</div>
+                                <div class="confidence-container">
+                                    <div class="confidence-bar-bg"><div class="confidence-bar-fill" id="confBar2"></div></div>
+                                    <span class="confidence-pct" id="confVal2">0%</span>
+                                </div>
+                                <div class="card-actions">
+                                    <button class="btn btn-outline copy-btn" data-target="friendlyResponse"><i class="fas fa-copy"></i> Copy</button>
+                                </div>
+                            </div>
+
+                            <!-- Flirty Response -->
+                            <div class="suggestion-card">
+                                <span class="label-badge label-flirty"><i class="fas fa-fire"></i> Playful / Flirty</span>
+                                <div class="suggestion-text" id="flirtyResponse">A response to build tension.</div>
+                                <div class="confidence-container">
+                                    <div class="confidence-bar-bg"><div class="confidence-bar-fill" id="confBar3"></div></div>
+                                    <span class="confidence-pct" id="confVal3">0%</span>
+                                </div>
+                                <div class="card-actions">
+                                    <button class="btn btn-outline copy-btn" data-target="flirtyResponse"><i class="fas fa-copy"></i> Copy</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h2>Charismatic AI</h2>
+                    <p class="footer-copy">© 2025 Social Intelligence Systems. All rights reserved.</p>
+                </div>
+                <div class="footer-note" style="color: var(--text-light); font-size: 0.8rem;">
+                    <i class="fas fa-user-shield"></i> Privacy first. Screenshots are never saved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        const apiKey = ""; // Managed by environment
+        let base64Image = null;
+
+        // DOM Elements
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const previewWrapper = document.getElementById('previewWrapper');
+        const imagePreview = document.getElementById('imagePreview');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const resultsContent = document.getElementById('resultsContent');
+        const fileInfo = document.getElementById('fileInfo');
+        
+        // Response Elements
+        const contextText = document.getElementById('contextText');
+        const bestResponse = document.getElementById('bestResponse');
+        const friendlyResponse = document.getElementById('friendlyResponse');
+        const flirtyResponse = document.getElementById('flirtyResponse');
+        
+        // Progress Bars
+        const confBars = [document.getElementById('confBar1'), document.getElementById('confBar2'), document.getElementById('confBar3')];
+        const confVals = [document.getElementById('confVal1'), document.getElementById('confVal2'), document.getElementById('confVal3')];
+
+        // Events
+        uploadArea.onclick = () => fileInput.click();
+        fileInput.onchange = handleFiles;
+
+        uploadArea.ondragover = (e) => { e.preventDefault(); uploadArea.classList.add('dragover'); };
+        uploadArea.ondragleave = () => uploadArea.classList.remove('dragover');
+        uploadArea.ondrop = (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            if(e.dataTransfer.files.length) {
+                fileInput.
